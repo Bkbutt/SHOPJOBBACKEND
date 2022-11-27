@@ -31,6 +31,7 @@ router.post('/postjob', protect, async(req,res)=>{
             const post = new jobPost(req.body);//no need to write all values
             post.user_id= req.user._id;        // post.user_id=currentuser; 
             post.username = req.user.name;
+            post.user_email=req.user.email;
             await post.save();
             return res.status(200).json({message:'Job Posted Successfully🤎👍'});
       } catch(err){
@@ -156,11 +157,11 @@ router.get('/post/search',async(req,res) => {
 //apply for a job
 router.post('/applyjob',async(req,res)=>{
       //if not fields return error fields are necessary
-
+          console.log("in the apply")
       try{
-            replacements = req.body 
-            receiverEmail= jobPost.find
-            // receiverEmail = req.body.receiverEmail
+             let  replacements = req.body 
+            //  let receiverEmail= jobPost.find
+            let  receiverEmail = req.body.receiverEmail
             try {
                   transporter = nodemailer.createTransport({
                         host: "smtp.gmail.com",

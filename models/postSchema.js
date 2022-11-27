@@ -19,7 +19,7 @@ const postSchema = mongoose.Schema({
     
     salary:{ type: Number ,required:true},
     description:{ type: String },
-
+    user_email:{ type: String, required:true},
     user_id:{ type: String, required:true}, 
     username:{ type: String, required:true}
 });
