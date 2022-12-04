@@ -9,10 +9,11 @@ const userSchema = mongoose.Schema({
   email:{ type: String , required: true, Unique:true} ,
   password:{ type: String , required : true} ,
    cpassword:{ type: String , required : true} ,
+   userimg:{ type: String } ,
 
    name:{ type: String , required : true} ,
     city:{ type: String , required: true},
-    dob:{ type: Date , required: true} ,
+    dob:{ type: String , required: true} ,
 
    address:{ type: String , required:true} ,
    phoneno:{ type: Number, required:true} ,

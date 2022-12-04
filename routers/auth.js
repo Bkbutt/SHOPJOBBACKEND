@@ -15,23 +15,26 @@ const protect = require('../middleware/authMiddleware');
 //all done execution
 //sgnup
 router.post('/register', async (req, res)=>{
-       const {email,password,cpassword,name,city,dob,address,phoneno,qualification}= req.body;
+   console.log('in register');
+       const {email,password,cpassword,name,userimg,city,dob,address,phoneno,qualification}= req.body; 
         if(!email || !password ||!cpassword ||!name||!city||!dob ||!address)
               {  return res.status(422).json({error:"Please fill the required fields"}); }
          try{
             const userExists= await User.findOne({email:email});
             if(userExists){
-                 return res.status(422).json({error:'Email already exists!'});
+                 return res.status(422).json({error:'Email User already exists!'});
+            
              } 
              else if(password != cpassword) {
                 return res.status(422).json({error:'passwords dont match!'}); 
              }
              else{
-                 const user = new User({email,password,cpassword,name,city,dob,address,phoneno,qualification});//dbname:nameoffrontendField
+                 const user = new User({email,password,cpassword,name,userimg,city,dob,address,phoneno,qualification});//dbname:nameoffrontendField
                 //pre middleware for password hsshing will be called before save()
                 user.token =await user.generateAuthToken();
                  await user.save();
                  res.status(201).json({message:'User registered successfully 🤎'});
+                 console.log("registered")
              }
              
             } 

@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 
 const postSchema = mongoose.Schema({
     shopname:{ type: String , required: true} ,
-    pimg:{ type: String } ,
-     userimg:{ type: String } ,
+     postimg:{ type: String } ,
+     userpic:{ type: String } ,
 
     jobname:{ type: String , required : true} ,
 

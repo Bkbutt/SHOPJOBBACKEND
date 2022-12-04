@@ -7,7 +7,7 @@ const { findOne } = require('../models/userSchema');
 const jwt = require('jsonwebtoken');   // const middleware = (req,res,next)=>{console.log('i am middleware'); next();}
 const cokiparser    = require('cookie-parser');
 const jobPost = require('../models/postSchema');
-const profile = require('../models/profileSchema');
+// const profile = require('../models/profileSchema');
 const e = require('express');
 const  protect  = require('../middleware/authMiddleware.js')
 // const User = require('../models/userSchema');

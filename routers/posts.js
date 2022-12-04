@@ -9,7 +9,7 @@ const { findOne } = require('../models/userSchema');
 const jwt = require('jsonwebtoken');   // const middleware = (req,res,next)=>{console.log('i am middleware'); next();}
 const     cokiparser    = require('cookie-parser');
 const jobPost = require('../models/postSchema');
-const profile = require('../models/profileSchema');
+// const profile = require('../models/profileSchema');
 const e = require('express');
 
 const  protect  = require('../middleware/authMiddleware.js')
@@ -23,7 +23,7 @@ const { VERSION } = require('handlebars/runtime');
           
 // fill post job form 
 router.post('/postjob', protect, async(req,res)=>{ 
-      const {shopname,img,imgback,jobname,timing,shoploc,age, workersReq,experience,salary,description}= req.body;//11
+      const {shopname,postimg,jobname,timing,shoploc,age, workersReq,experience,salary,description}= req.body;//11
       if(!shopname||!jobname||!timing||!shoploc||!workersReq||!salary){ //6 required credentials
             return res.status(422).json({error:"Please fill the required fields"}); 
       }
@@ -32,6 +32,7 @@ router.post('/postjob', protect, async(req,res)=>{
             post.user_id= req.user._id;        // post.user_id=currentuser; 
             post.username = req.user.name;
             post.user_email=req.user.email;
+            post.userpic = req.user.userimg;             //same userimgfield schemain err
             await post.save();
             return res.status(200).json({message:'Job Posted Successfully🤎👍'});
       } catch(err){
@@ -105,30 +106,9 @@ router.get('/posts', protect, async(req,res) => {
 });
 
 
- 
+
 
 // search
-// router.get('/post/search',async(req,res) => {
-//       try {
-//             let { jobname, shoploc, shopname } = req.query;  //in strin url
-//             let search = {};
-//             if(jobname){
-//                   search["jobname"] = jobname;
-//             }
-//             if(shoploc){
-//                   search["shoploc"] = shoploc;
-//             }
-//             if(shopname){
-//                   search["shopname"] = shopname;
-//             }
-            
-//             let post = await Post.find(search); 
-//             res.status(200).json({ success: true, data: post })
-//       } catch (error) {
-//           console.log("error in getting user")
-//           res.status(400).json({error: "error in getting user info"})
-//       }
-// });
 
 
 router.get('/post/search',async(req,res) => {
@@ -155,14 +135,15 @@ router.get('/post/search',async(req,res) => {
       
           
 //apply for a job
-router.post('/applyjob',async(req,res)=>{
+
+router.post('/applyjob',protect, async(req,res)=>{
       //if not fields return error fields are necessary
           console.log("in the apply")
-      try{
+      try {
              let  replacements = req.body 
             //  let receiverEmail= jobPost.find
             let  receiverEmail = req.body.receiverEmail
-            try {
+            try  {
                   transporter = nodemailer.createTransport({
                         host: "smtp.gmail.com",
                         port: 465,
@@ -181,14 +162,14 @@ router.post('/applyjob',async(req,res)=>{
                         from: 'shopJOB <foobar@example.com>',
                         to: `${receiverEmail}`,
                         subject: "Email for Job Application",
-                        html: htmlToSend
+                        html: htmlToSend   
                   };
 
                   transporter.sendMail(mailOptions, function(error, info){
                         if (error) {
                               console.log(error);
                         } else {
-                              console.log('Email sent: ' + info.response);
+                              console.log('Email sent: '+ info.response );
                               return res.status(200).json({message:'Email Sent!'});
                         }
                   });  
@@ -210,20 +191,18 @@ module.exports = router;
 
 
 
-var readHTMLFile = function(path, callback) {
-      fs.readFile(path, {encoding: 'utf-8'}, (err, html) => {
-          if (err) {
-              throw err;
-              callback(err);
-          }
-          else {
-              callback(null, html);
-          }
-      });
-};
 
-
-
+   var readHTMLFile = function(path, callback)   {
+          fs.readFile(path, {encoding: 'utf-8'} ,(err, html)=> {
+              if ( err) {
+                  throw err;
+                  callback(err);
+              }  
+              else {
+                  callback(null, html)
+              }
+        });
+   };
 
 
 
@@ -231,3 +210,25 @@ var readHTMLFile = function(path, callback) {
 // shopname:/.*shopname.*/i  ,  
 // shoploc:/.*shoploc.*/i   ,
 // jobname: /.*jobname.*/i 
+// search
+// router.get('/post/search',async(req,res) => {
+//       try {
+//             let { jobname, shoploc, shopname } = req.query;  //in strin url
+//             let search = {};
+//             if(jobname){
+//                   search["jobname"] = jobname;
+//             }
+//             if(shoploc){
+//                   search["shoploc"] = shoploc;
+//             }
+//             if(shopname){
+//                   search["shopname"] = shopname;
+//             }
+            
+//             let post = await Post.find(search); 
+//             res.status(200).json({ success: true, data: post })
+//       } catch (error) {
+//           console.log("error in getting user")
+//           res.status(400).json({error: "error in getting user info"})
+//       }
+// });

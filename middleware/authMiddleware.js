@@ -13,8 +13,8 @@ const protect = async (req, res, next) => {
             const decode =  jwt.verify(token, process.env.SECRET_KEY )
             // console.log('decode',decode);                   
             currentuser = await User.findById(decode._doc._id) //*
-            let {_id,email,password,cpassword,name,city,dob,address,phoneno,qualification}=currentuser ;
-            req.user = {_id,email,password,cpassword,name,city,dob,address,phoneno,qualification};
+            let {_id,email,password,cpassword,name,userimg,city,dob,address,phoneno,qualification}=currentuser ;
+            req.user = {_id,email,password,cpassword,name,userimg,city,dob,address,phoneno,qualification};
             console.log('user active:',req.user);
             next()
         } catch (error) {
