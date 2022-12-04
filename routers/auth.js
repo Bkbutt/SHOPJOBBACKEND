@@ -92,13 +92,13 @@ router.post('/register', async (req, res)=>{
    router.post('/settings/changepass',protect, async (req,res)=>{
          console.log("in the settinngs");
          const {email,oldpass,newpass, cfmpass} = req.body;
-         if(!email || !oldpass ||!newpass || !cfmpass){
+         if(!oldpass ||!newpass || !cfmpass){
          return res.status(400).json({message:"please fill credendials!"});
          }
 
          try{     
 
-            const user = await User.findOne({email:email});  
+            const user = await User.findOne({email:req.user.email});  
             if(user) {
                    console.log('i am the user',user);
                   const PassMatch =await bcrypt.compare(oldpass,user.password);
